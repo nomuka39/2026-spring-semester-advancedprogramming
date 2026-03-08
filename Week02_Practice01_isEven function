@@ -1,0 +1,16 @@
+def isEven(n):
+    if n % 2 == 0:
+        #print(“Even”)
+        return True
+    else:
+        #print(“Odd”)
+        return False
+
+#
+
+for i in range(5):
+    x = int(input(“Please input a integer:”))
+    if isEven(x):
+        print(“%d is Even.” % (x))
+    else:
+        print(“%d is Odd.” % (x))
