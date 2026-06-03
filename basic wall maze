@@ -1,0 +1,137 @@
+#include <stdio.h>
+#include <string.h>
+
+#define SIZE 6
+
+typedef struct {
+    int x, y;
+} Node;
+
+int visited[SIZE][SIZE];
+int parentX[SIZE][SIZE];
+int parentY[SIZE][SIZE];
+char parentMove[SIZE][SIZE];
+
+int blocked[SIZE][SIZE][4]; 
+// 0 = North, 1 = East, 2 = South, 3 = West
+
+int dx[] = {-1, 0, 1, 0};
+int dy[] = {0, 1, 0, -1};
+char dirChar[] = {'N', 'E', 'S', 'W'};
+
+void addWall(int x1, int y1, int x2, int y2) {
+    // Vertical wall
+    if (x1 == x2) {
+        int x = x1;
+        int start = y1 < y2 ? y1 : y2;
+        int end = y1 > y2 ? y1 : y2;
+
+        for (int y = start; y < end; y++) {
+            if (x > 0 && x < 6) {
+                blocked[y][x - 1][1] = 1; // east
+                blocked[y][x][3] = 1;     // west
+            }
+        }
+    }
+    // Horizontal wall
+    else {
+        int y = y1;
+        int start = x1 < x2 ? x1 : x2;
+        int end = x1 > x2 ? x1 : x2;
+
+        for (int x = start; x < end; x++) {
+            if (y > 0 && y < 6) {
+                blocked[y - 1][x][2] = 1; // south
+                blocked[y][x][0] = 1;     // north
+            }
+        }
+    }
+}
+
+void bfs(int sx, int sy, int ex, int ey) {
+    Node queue[100];
+    int front = 0, rear = 0;
+
+    queue[rear++] = (Node){sx, sy};
+    visited[sx][sy] = 1;
+
+    while (front < rear) {
+        Node cur = queue[front++];
+
+        if (cur.x == ex && cur.y == ey)
+            return;
+
+        for (int d = 0; d < 4; d++) {
+            int nx = cur.x + dx[d];
+            int ny = cur.y + dy[d];
+
+            if (nx < 0 || nx >= SIZE || ny < 0 || ny >= SIZE)
+                continue;
+
+            if (blocked[cur.x][cur.y][d])
+                continue;
+
+            if (!visited[nx][ny]) {
+                visited[nx][ny] = 1;
+                parentX[nx][ny] = cur.x;
+                parentY[nx][ny] = cur.y;
+                parentMove[nx][ny] = dirChar[d];
+
+                queue[rear++] = (Node){nx, ny};
+            }
+        }
+    }
+}
+
+void printPath(int ex, int ey, int sx, int sy) {
+    char path[100];
+    int len = 0;
+
+    int x = ex, y = ey;
+
+    while (!(x == sx && y == sy)) {
+        path[len++] = parentMove[x][y];
+
+        int px = parentX[x][y];
+        int py = parentY[x][y];
+
+        x = px;
+        y = py;
+    }
+
+    for (int i = len - 1; i >= 0; i--)
+        printf("%c", path[i]);
+
+    printf("\n");
+}
+
+int main() {
+    int sx, sy, ex, ey;
+
+    while (scanf("%d %d", &sy, &sx) == 2) {
+        if (sx == 0 && sy == 0)
+            break;
+
+        scanf("%d %d", &ey, &ex);
+
+        memset(blocked, 0, sizeof(blocked));
+        memset(visited, 0, sizeof(visited));
+
+        for (int i = 0; i < 3; i++) {
+            int x1, y1, x2, y2;
+            scanf("%d %d %d %d", &x1, &y1, &x2, &y2);
+
+            addWall(x1, y1, x2, y2);
+        }
+
+        // Convert to 0-based
+        sx--; sy--;
+        ex--; ey--;
+
+        bfs(sx, sy, ex, ey);
+
+        printPath(ex, ey, sx, sy);
+    }
+
+    return 0;
+}
