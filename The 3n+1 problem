@@ -1,0 +1,24 @@
+import sys
+
+for line in sys.stdin:
+    i, j = map(int, line.split())
+
+    start = min(i, j)
+    end = max(i, j)
+    max_length = 0
+
+    for n in range(start, end + 1):
+        x = n
+        length = 1
+
+        while x != 1:
+            if x % 2 == 1:
+                x = 3 * x + 1
+            else:
+                x = x // 2
+            length += 1
+
+        if length > max_length:
+            max_length = length
+
+    print(i, j, max_length)
