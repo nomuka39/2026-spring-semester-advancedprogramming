@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    int N, L;
+
+    while (scanf("%d %d", &N, &L) == 2) {
+        char s[15];
+        int answer = 1;
+
+        for (int i = 0; i < N; i++) {
+            scanf("%s", s);
+
+            int cnt2 = 0;
+
+            for (int j = 0; j < L; j++) {
+                if (s[j] == '2')
+                    cnt2++;
+            }
+
+            // maximum distinct haplotypes needed
+            if (cnt2 + 1 > answer)
+                answer = cnt2 + 1;
+        }
+
+        printf("%d\n", answer);
+    }
+
+    return 0;
+}
