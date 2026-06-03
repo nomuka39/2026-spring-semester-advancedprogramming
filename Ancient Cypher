@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char a[105], b[105];
+
+    while (scanf("%s %s", a, b) != EOF) {
+
+        if (strlen(a) != strlen(b)) {
+            printf("NO\n");
+            continue;
+        }
+
+        int freq1[26] = {0};
+        int freq2[26] = {0};
+
+        for (int i = 0; a[i]; i++) {
+            freq1[a[i] - 'A']++;
+            freq2[b[i] - 'A']++;
+        }
+
+        // sort frequency arrays
+        for (int i = 0; i < 26; i++) {
+            for (int j = i + 1; j < 26; j++) {
+                if (freq1[i] > freq1[j]) {
+                    int temp = freq1[i];
+                    freq1[i] = freq1[j];
+                    freq1[j] = temp;
+                }
+
+                if (freq2[i] > freq2[j]) {
+                    int temp = freq2[i];
+                    freq2[i] = freq2[j];
+                    freq2[j] = temp;
+                }
+            }
+        }
+
+        int ok = 1;
+
+        for (int i = 0; i < 26; i++) {
+            if (freq1[i] != freq2[i]) {
+                ok = 0;
+                break;
+            }
+        }
+
+        if (ok)
+            printf("YES\n");
+        else
+            printf("NO\n");
+    }
+
+    return 0;
+}
