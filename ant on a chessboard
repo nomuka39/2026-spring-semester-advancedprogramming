@@ -1,0 +1,44 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int main() {
+    long long n;
+
+    while (cin >> n && n != 0) {
+
+        long long k = (long long) sqrt((double)n);
+
+        if (k * k < n)
+            k++;
+
+        long long mid = k * k - k + 1;
+
+        long long x, y;
+
+        if (k % 2 == 0) {
+
+            if (n >= mid) {
+                x = k;
+                y = k * k - n + 1;
+            } else {
+                x = n - (k - 1) * (k - 1);
+                y = k;
+            }
+
+        } else {
+
+            if (n >= mid) {
+                x = k * k - n + 1;
+                y = k;
+            } else {
+                x = k;
+                y = n - (k - 1) * (k - 1);
+            }
+        }
+
+        cout << x << " " << y << endl;
+    }
+
+    return 0;
+}
