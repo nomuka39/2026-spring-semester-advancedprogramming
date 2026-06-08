@@ -1,0 +1,30 @@
+#include <stdio.h>
+
+int main() {
+    int T;
+    scanf("%d", &T);
+
+    for (int caseNum = 1; caseNum <= T; caseNum++) {
+        char url[10][105];
+        int value[10];
+        int max = 0;
+
+        for (int i = 0; i < 10; i++) {
+            scanf("%s %d", url[i], &value[i]);
+
+            if (value[i] > max) {
+                max = value[i];
+            }
+        }
+
+        printf("Case #%d:\n", caseNum);
+
+        for (int i = 0; i < 10; i++) {
+            if (value[i] == max) {
+                printf("%s\n", url[i]);
+            }
+        }
+    }
+  
+    return 0;
+}
